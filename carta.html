@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vudú — Carta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Barlow:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --black: #111111;
+      --white: #ffffff;
+      --light: #f5f5f3;
+      --mid: #888;
+      --danger: #c0392b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Barlow', sans-serif;
+    }
+
+    /* ═══════════════════════════════════════
+       PORTADA
+    ═══════════════════════════════════════ */
+    .cover {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-logo {
+      max-width: 240px;
+      max-height: 160px;
+      object-fit: contain;
+      margin-bottom: 32px;
+    }
+    .cover-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 8px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .cover-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 4px;
+      margin-top: 6px;
+      margin-bottom: 48px;
+    }
+    .cover-tagline {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #666;
+      margin-top: 40px;
+    }
+
+    /* ═══════════════════════════════════════
+       FILTRO ALÉRGENOS
+    ═══════════════════════════════════════ */
+    .filter-bar {
+      background: var(--black);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .filter-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .chip {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      color: #aaa;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.68rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .chip:hover { border-color: var(--gold); color: var(--gold); }
+    .chip.on { background: var(--gold); border-color: var(--gold); color: #000; }
+    .chip-clear {
+      background: transparent;
+      border: 1px dashed #444;
+      color: #555;
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-size: 0.68rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip-clear:hover { border-color: #888; color: #aaa; }
+
+    /* ═══════════════════════════════════════
+       SECCIÓN DE CARTA
+    ═══════════════════════════════════════ */
+    .menu-page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    /* Header de categoría — estilo PDF */
+    .cat-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 52px 0 28px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 32px;
+    }
+    .cat-header-inner {
+      text-align: right;
+    }
+    .cat-en {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--black);
+      line-height: 1;
+    }
+    .cat-es {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+    .cat-logo {
+      width: 60px;
+      margin-right: auto;
+      opacity: 0.9;
+    }
+
+    /* Plato */
+    .plato {
+      padding: 20px 0;
+      border-bottom: 1px solid #ebebeb;
+      transition: opacity 0.2s;
+    }
+    .plato.oculto { opacity: 0.12; pointer-events: none; }
+    .plato-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 5px;
+    }
+    .plato-nombre {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--black);
+      line-height: 1.2;
+    }
+    .plato-new {
+      font-size: 0.6rem;
+      background: var(--gold);
+      color: #000;
+      padding: 1px 5px;
+      border-radius: 2px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .plato-precio {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--black);
+      white-space: nowrap;
+    }
+    .plato-desc-en {
+      font-size: 0.8rem;
+      color: #444;
+      line-height: 1.5;
+      margin-bottom: 2px;
+    }
+    .plato-desc-es {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--gold);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .alerg-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .alerg-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: #f5f0e8;
+      border: 1px solid #e8d8b0;
+      color: #8a6e30;
+      border-radius: 3px;
+      padding: 2px 7px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .sin-alerg {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #4a8a4a;
+    }
+
+    /* ═══════════════════════════════════════
+       NOTA LEGAL
+    ═══════════════════════════════════════ */
+    .legal {
+      background: var(--black);
+      text-align: center;
+      padding: 28px 20px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #555;
+      line-height: 2;
+    }
+    .legal span { color: var(--gold); }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .cover-title { font-size: 3.5rem; }
+      .cat-en { font-size: 1.8rem; }
+      .plato-nombre { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <img class="cover-logo" src="logo.png" alt="Vudú"
+       onerror="this.style.display='none'">
+  <div class="cover-title">VUDU</div>
+  <div class="cover-sub">Food</div>
+  <div class="cover-tagline">Puerto Banús · Marbella · +34 610 170 701</div>
+</div>
+
+<!-- FILTRO -->
+<div class="filter-bar">
+  <div class="filter-label">⚠ Mostrar platos SIN este alérgeno</div>
+  <div class="filter-chips" id="chips">
+    <button class="chip" data-a="gluten"        onclick="toggle(this)">🌾 Gluten</button>
+    <button class="chip" data-a="crustaceos"    onclick="toggle(this)">🦐 Crustáceos</button>
+    <button class="chip" data-a="huevos"        onclick="toggle(this)">🥚 Huevos</button>
+    <button class="chip" data-a="pescado"       onclick="toggle(this)">🐟 Pescado</button>
+    <button class="chip" data-a="cacahuetes"    onclick="toggle(this)">🥜 Cacahuetes</button>
+    <button class="chip" data-a="soja"          onclick="toggle(this)">🫘 Soja</button>
+    <button class="chip" data-a="lacteos"       onclick="toggle(this)">🥛 Lácteos</button>
+    <button class="chip" data-a="frutoscascara" onclick="toggle(this)">🌰 Fr. cáscara</button>
+    <button class="chip" data-a="apio"          onclick="toggle(this)">🥬 Apio</button>
+    <button class="chip" data-a="mostaza"       onclick="toggle(this)">🌿 Mostaza</button>
+    <button class="chip" data-a="sesamo"        onclick="toggle(this)">🌱 Sésamo</button>
+    <button class="chip" data-a="sulfitos"      onclick="toggle(this)">🍷 Sulfitos</button>
+    <button class="chip" data-a="altramuces"    onclick="toggle(this)">🌼 Altramuces</button>
+    <button class="chip" data-a="moluscos"      onclick="toggle(this)">🐚 Moluscos</button>
+    <button class="chip-clear" onclick="clear()">✕ Limpiar</button>
+  </div>
+</div>
+
+<!-- CARTA -->
+<div class="menu-page" id="carta"></div>
+
+<!-- LEGAL -->
+<div class="legal">
+  <div>⚠ Información sobre alérgenos según el <span>Reglamento UE 1169/2011</span></div>
+  <div>Si tiene alguna alergia o intolerancia, comuníqueselo a nuestro personal antes de pedir.</div>
+  <div style="margin-top:8px">*Precios en € · IVA incluido · Cargo por servicio no incluido · Cover charge 3,50 €</div>
+  <div style="margin-top:4px; font-size:0.75rem; color:#888">حلال &nbsp; HALAL</div>
+</div>
+
+<script>
+/* ── DATOS ─────────────────────────────────────────────── */
+const LABELS = {
+  gluten:        ['🌾','Gluten'],
+  crustaceos:    ['🦐','Crustáceos'],
+  huevos:        ['🥚','Huevos'],
+  pescado:       ['🐟','Pescado'],
+  cacahuetes:    ['🥜','Cacahuetes'],
+  soja:          ['🫘','Soja'],
+  lacteos:       ['🥛','Lácteos'],
+  frutoscascara: ['🌰','Fr. cáscara'],
+  apio:          ['🥬','Apio'],
+  mostaza:       ['🌿','Mostaza'],
+  sesamo:        ['🌱','Sésamo'],
+  sulfitos:      ['🍷','Sulfitos'],
+  altramuces:    ['🌼','Altramuces'],
+  moluscos:      ['🐚','Moluscos']
+};
+
+const CATS = {
+  'Entrantes': { en: 'Starters', es: 'Entrantes' },
+  'Principales': { en: 'Mains', es: 'Principales' },
+  'Guarniciones': { en: 'Sides', es: 'Guarniciones' },
+  'Salsas': { en: 'Sauces', es: 'Salsas' },
+  'Postres': { en: 'Deserts', es: 'Postres' }
+};
+
+const MENU = [
+  // ── ENTRANTES ──────────────────────────────────────────
+  {
+    cat: 'Entrantes',
+    nombre: 'Edamame Spicy',
+    desc_en: 'Soy beans, spicy sauce, sesame and lime',
+    desc_es: 'Habas de soja, salsa picante, sésamo y lima',
+    precio: '14',
+    alergenos: ['soja','sesamo']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Greek Yakitori',
+    suffix: '(2 unit)',
+    new: true,
+    desc_en: 'Grilled chicken with tzatziki sauce, lime and pita bread',
+    desc_es: 'Yakitori de pollo a la parrilla con salsa tzatziki y pan de pita',
+    precio: '18',
+    alergenos: ['gluten','lacteos']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Burrata',
+    new: true,
+    desc_en: 'Cherry tomatoes, basil pesto, crunchy olives and basil oil',
+    desc_es: 'Tomate cherry, pesto, aceitunas crujientes y aceite de albahaca',
+    precio: '20',
+    alergenos: ['lacteos','frutoscascara']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Red Tuna Tartar',
+    desc_en: 'Red tuna with kimchee and soy sauce, corn tortilla chips and guacamole',
+    desc_es: 'Atún rojo con kimchi y soja, totopos de maíz y guacamole',
+    precio: '28',
+    alergenos: ['pescado','soja']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Vudu Cesar Salad',
+    desc_en: 'Romaine lettuce, crispy chicken, parmesan, cherry tomato and caesar sauce',
+    desc_es: 'Lechuga romana, pollo crujiente, parmesano, tomate cherry y salsa césar',
+    precio: '21',
+    alergenos: ['gluten','huevos','pescado','lacteos','mostaza']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Sando de Wagyu',
+    desc_en: 'Japanese-style wagyu sandwich with sando sauce',
+    desc_es: 'Sándwich de wagyu estilo japonés con salsa sando',
+    precio: '29',
+    alergenos: ['gluten','huevos','mostaza']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Tacos de Costilla Angus',
+    suffix: '(2 unit)',
+    desc_en: 'Corn tortilla, low temperature angus ribs, avocado, onion and coriander',
+    desc_es: 'Tortilla de maíz, costilla de angus a baja temperatura, aguacate, cebolla y cilantro',
+    precio: '22',
+    alergenos: []
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Forget Me, Not Gyozas',
+    desc_en: 'Chicken and vegetable gyozas, with peanut, lime & soja sauce',
+    desc_es: 'Gyozas de pollo y verduras fritas, con salsa de cacahuetes, lima y soja',
+    precio: '19',
+    alergenos: ['gluten','cacahuetes','soja']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Wagyu Pizza',
+    desc_en: 'Bolognese wagyu sauce, basil, fior di latte mozzarella and parmesan',
+    desc_es: 'Salsa boloñesa de wagyu, albahaca, mozzarella fior di latte y parmesano',
+    precio: '26',
+    alergenos: ['gluten','lacteos']
+  },
+  {
+    cat: 'Entrantes',
+    nombre: 'Truffle Pizza',
+    desc_en: 'Truffled creme fraiche, fresh truffle and fior di latte mozzarella',
+    desc_es: 'Crème fraîche trufada, trufa fresca y mozzarella fior di latte',
+    precio: '24',
+    alergenos: ['gluten','lacteos']
+  },
+
+  // ── PRINCIPALES ────────────────────────────────────────
+  {
+    cat: 'Principales',
+    nombre: 'Wagyu Pasta',
+    desc_en: 'Sicilian pasta, wagyu bolognese, wagyu cured meat, chopped mint and grated parmesan',
+    desc_es: 'Pasta siciliana, boloñesa de wagyu, cecina de wagyu, menta picada y parmesano rallado',
+    precio: '30',
+    alergenos: ['gluten','lacteos']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Tagliatelle Alfredo',
+    new: true,
+    desc_en: 'Chicken, Alfredo\'s sauce, truffle and parmesan',
+    desc_es: 'Pollo, salsa alfredo, trufa y parmesano',
+    precio: '29',
+    alergenos: ['gluten','huevos','lacteos']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Risotto di Pasta Tartufato',
+    desc_en: 'Pasta risotto, tartufata, black truffle, crispy parmesan and chives',
+    desc_es: 'Risotto de pasta, tartufata, trufa negra, crujiente de parmesano y cebollino',
+    precio: '28',
+    alergenos: ['gluten','lacteos']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Amazonic Sea Bass',
+    desc_en: 'Sea bass with achiote chilli sauce cooked in banana leaf',
+    desc_es: 'Lubina con salsa de achiote y chiles, cocinado en hoja de plátano',
+    precio: '36',
+    alergenos: ['pescado']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Tamarind Salmon, Lemon & Coconut',
+    desc_en: 'Grilled salmon with tamarind sauce',
+    desc_es: 'Salmón a la plancha con salsa de tamarindo',
+    precio: '33',
+    alergenos: ['pescado']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Flame-Kissed Chicken',
+    desc_en: 'Mediterranean grilled chicken thigh',
+    desc_es: 'Contramuslo de pollo a la parrilla mediterráneo',
+    precio: '31',
+    alergenos: []
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Black Angus Entrecot',
+    desc_en: '350g grilled Black Angus entrecôte',
+    desc_es: 'Entrecot de 350g de Black Angus a la parrilla',
+    precio: '44',
+    alergenos: []
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Cow Longhorn Sirloin',
+    desc_en: '250g grilled sirloin',
+    desc_es: 'Solomillo de 250g a la parrilla',
+    precio: '45',
+    alergenos: []
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Burger MC Wagyu',
+    desc_en: 'Wagyu burger, tomato, lettuce, red onion, cheddar cheese, burger mayonnaise and fries',
+    desc_es: 'Hamburguesa wagyu, tomate, lechuga, cebolla morada, queso cheddar, mayonesa y patatas fritas',
+    precio: '32',
+    alergenos: ['gluten','huevos','lacteos','mostaza']
+  },
+  {
+    cat: 'Principales',
+    nombre: 'Veggie Burger',
+    desc_en: '"Beyond meat burger", tomato, lettuce, red onion, cheddar cheese, burger mayonnaise and fries',
+    desc_es: '"Beyond meat burger", tomate, lechuga, cebolla morada, queso cheddar, mayonesa y patatas fritas',
+    precio: '30',
+    alergenos: ['gluten','huevos','lacteos','soja','mostaza']
+  },
+
+  // ── GUARNICIONES ──────────────────────────────────────
+  {
+    cat: 'Guarniciones',
+    nombre: 'Fries',
+    desc_en: '', desc_es: 'Patatas fritas',
+    precio: '8', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Truffled & Parmesan Fries',
+    desc_en: '', desc_es: 'Patatas fritas con trufa y parmesano',
+    precio: '8', alergenos: ['lacteos']
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Mashed Potatoes',
+    desc_en: '', desc_es: 'Puré de patata',
+    precio: '8', alergenos: ['lacteos']
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Seasonal Vegetables',
+    desc_en: '', desc_es: 'Verduras de temporada',
+    precio: '8', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Green Salad',
+    desc_en: '', desc_es: 'Ensalada verde',
+    precio: '8', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Basmati Rice',
+    desc_en: '', desc_es: 'Arroz basmati',
+    precio: '8', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Roasted Asparagus',
+    desc_en: '', desc_es: 'Espárragos asados',
+    precio: '10', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Avocado Salad',
+    desc_en: '', desc_es: 'Ensalada de aguacate',
+    precio: '8', alergenos: []
+  },
+  {
+    cat: 'Guarniciones',
+    nombre: 'Bimi',
+    desc_en: '', desc_es: 'Bimi a la plancha',
+    precio: '10', alergenos: []
+  },
+
+  // ── SALSAS ────────────────────────────────────────────
+  {
+    cat: 'Salsas',
+    nombre: 'Pepper Sauce',
+    desc_en: '', desc_es: 'Salsa de pimienta',
+    precio: '5', alergenos: ['lacteos']
+  },
+  {
+    cat: 'Salsas',
+    nombre: 'Meat Juice',
+    desc_en: '', desc_es: 'Jugo de carne',
+    precio: '5', alergenos: []
+  },
+  {
+    cat: 'Salsas',
+    nombre: 'Chimichurri',
+    desc_en: '', desc_es: 'Salsa chimichurri',
+    precio: '5', alergenos: []
+  },
+  {
+    cat: 'Salsas',
+    nombre: 'Truffle Mayonnaise',
+    desc_en: '', desc_es: 'Mayonesa de trufa',
+    precio: '5', alergenos: ['huevos']
+  },
+
+  // ── POSTRES ───────────────────────────────────────────
+  {
+    cat: 'Postres',
+    nombre: 'Nido de Dubai',
+    desc_en: 'Chocolate sphere, pistachio cream, kataifi, chocolate & pistachio sauce',
+    desc_es: 'Esfera de chocolate, crema de pistacho, pasta kataifi, salsa de chocolate y pistacho',
+    precio: '16',
+    alergenos: ['gluten','lacteos','frutoscascara']
+  },
+  {
+    cat: 'Postres',
+    nombre: 'Coulant on Fire',
+    desc_en: 'Flaming dark chocolate coulant, crumble and vanilla ice cream',
+    desc_es: 'Coulant de chocolate negro en llamas, crumble y helado de vainilla',
+    precio: '14',
+    alergenos: ['gluten','huevos','lacteos']
+  },
+  {
+    cat: 'Postres',
+    nombre: 'Coulant Gold & Fire',
+    desc_en: 'Flaming dark chocolate coulant, crumble, vanilla ice cream. Optional coated with 24K gold',
+    desc_es: 'Coulant on fire, opcional recubierto con oro de 24K',
+    precio: '21',
+    alergenos: ['gluten','huevos','lacteos']
+  },
+  {
+    cat: 'Postres',
+    nombre: 'Cheesecake',
+    desc_en: 'Cheesecake with red berries sauce',
+    desc_es: 'Tarta de queso con frutos rojos',
+    precio: '14',
+    alergenos: ['gluten','huevos','lacteos']
+  },
+  {
+    cat: 'Postres',
+    nombre: 'Mochi Si o Si',
+    suffix: '(unidad)',
+    desc_en: 'Japanese mochi to choose',
+    desc_es: 'Mochi japonés a elegir',
+    precio: '8',
+    alergenos: []
+  }
+];
+
+/* ── RENDER ─────────────────────────────────────────────── */
+let active = new Set();
+
+function render() {
+  const groups = {};
+  MENU.forEach(p => {
+    if (!groups[p.cat]) groups[p.cat] = [];
+    groups[p.cat].push(p);
+  });
+
+  const carta = document.getElementById('carta');
+  carta.innerHTML = Object.entries(groups).map(([cat, platos]) => {
+    const info = CATS[cat] || { en: cat, es: cat };
+    return `
+      <section>
+        <div class="cat-header">
+          <img class="cat-logo" src="logo.png" alt="" onerror="this.style.display='none'">
+          <div class="cat-header-inner">
+            <div class="cat-en">${info.en}</div>
+            <div class="cat-es">${info.es}</div>
+          </div>
+        </div>
+        ${platos.map(p => {
+          const blocked = active.size > 0 && p.alergenos.some(a => active.has(a));
+          const alergHtml = p.alergenos.length
+            ? p.alergenos.map(a => `<span class="alerg-tag">${LABELS[a][0]} ${LABELS[a][1]}</span>`).join('')
+            : '<span class="sin-alerg">✓ Sin alérgenos declarados</span>';
+          const nombre = p.nombre
+            + (p.suffix ? ` <span style="font-weight:400;font-size:0.85em">${p.suffix}</span>` : '')
+            + (p.new ? '<span class="plato-new">NEW</span>' : '');
+          return `
+          <div class="plato${blocked ? ' oculto' : ''}" data-a="${p.alergenos.join(' ')}">
+            <div class="plato-top">
+              <div class="plato-nombre">${nombre}</div>
+              <div class="plato-precio">${p.precio}</div>
+            </div>
+            ${p.desc_en ? `<div class="plato-desc-en">${p.desc_en}</div>` : ''}
+            ${p.desc_es ? `<div class="plato-desc-es">${p.desc_es}</div>` : ''}
+            <div class="alerg-row">${alergHtml}</div>
+          </div>`;
+        }).join('')}
+      </section>`;
+  }).join('');
+}
+
+function toggle(btn) {
+  const a = btn.dataset.a;
+  active.has(a) ? (active.delete(a), btn.classList.remove('on')) : (active.add(a), btn.classList.add('on'));
+  render();
+}
+
+function clear() {
+  active.clear();
+  document.querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
